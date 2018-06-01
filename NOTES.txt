@@ -9,3 +9,7 @@ to do fancy advances graphics stuff.
 state-changing/state-using functions.
 3. Object    - an abstraction which has a set of options to describe a 
 subset of OpenGL state
+4. GLFW      - library written in C specific for OpenGL for displaying things 
+			   to render on
+5. GLAD		 - openGL is a specification but we require definitions. Open-source
+			   web service for setting definitions of openGL functions
