@@ -1,0 +1,4 @@
+Useful Resources
+----------------
+
+1. Description about Vertex Array Objects : http://antongerdelan.net/opengl/vertexbuffers.html

@@ -13,3 +13,23 @@ subset of OpenGL state
 			   to render on
 5. GLAD		 - openGL is a specification but we require definitions. Open-source
 			   web service for setting definitions of openGL functions
+6. Graphics pipeline - the entire workflow comprising of taking inputs in 3D space
+					   to rendering it as 2D colored pixels.
+7. shaders	 - small programs which run on individual GPU cores in parallel
+8. GLSL		 - separate subset language of C used to program shaders
+9. vertex 	 - an object(!?) consisting of information about a point in 3D space
+10. vertex attributes - information used to define a vertex
+11. primitives - the standard ways openGL uses to interpret vertex data.
+12. clipping - Method used to discard the world outside the camera from rendering.
+			   Happens before fragment shaders start running.
+13. normalized device coordinates - The normalized coordinate space of (-1,-1,-1) 
+								    to (1,1,1) inside which the objects are rendered.
+14. viewport transform - the transform operation applied to change coordinate system
+						 to the screen coordinate system.
+15. Vertex Buffer Objects(VBO) - Memory allocated in GPU to store large number of
+								 vertices
+16. Vertex Array Objects(VAO)  - GL objects which store vertex attribute pointers
+								 along with the buffer objects and ways of interpreting
+								 the buffer object.
+17. Element Array Objects (EAO)- GL objects which store the order of vertices in which
+								 to be connected.

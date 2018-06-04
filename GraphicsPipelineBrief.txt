@@ -1,0 +1,23 @@
+Graphics Pipeline
+-----------------
+
+1. Vertex Shader - transform 3D coordinates into different 3D coordinates	
+				   (based on camera!?)
+2. Primitive assembly - forming primitive shapes from vertex data of vertex shader
+				   (like using GL_LINES, GL_TRIANGLES etc.)
+3. Geometry shader - forming new shapes out of primitive shapes	
+					 (what is the purpose!?)
+4. Rasterization - Converting 3D coordinates to 2D screen positions and finally
+				   resulting in what pixels on the screen to use.
+5. Fragment Shader - Assigning colors to the pixels selected by rasterization
+6. Alpha Tests and Blending - Correcting the output for depth perception and applying
+							  opacity values to the colors.
+							  
+Buffers and Bindings
+--------------------
+
+1. First, we create a buffer with a given unique id using gl_genBuffers
+2. Second, we bind the created to a buffer to a particular type using gl_BindBuffers
+3. Third, we fill the buffer by copying the user data using glBufferData
+
+NOTE: GL_STATIC_DRAW vs GL_DYNAMIC_DRAW vs GL_STREAM_DRAW
