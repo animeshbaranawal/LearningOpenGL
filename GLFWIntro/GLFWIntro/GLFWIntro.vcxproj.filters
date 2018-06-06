@@ -42,6 +42,9 @@
     <ClCompile Include="Shader\MyShader.cpp">
       <Filter>Source Files\Shader</Filter>
     </ClCompile>
+    <ClCompile Include="Shader\MyShaderProgram.cpp">
+      <Filter>Source Files\Shader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="utils.h">
@@ -51,6 +54,9 @@
       <Filter>Header Files\Callback</Filter>
     </ClInclude>
     <ClInclude Include="Shader\MyShader.h">
+      <Filter>Header Files\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader\MyShaderProgram.h">
       <Filter>Header Files\Shader</Filter>
     </ClInclude>
   </ItemGroup>

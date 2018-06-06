@@ -69,7 +69,7 @@ bool MyShader::compileShader()
 
 void MyShader::getShaderCompilationStatus(int& success, char** logMessage, unsigned int logLength)
 {
-	if (!shaderID)
+	if (shaderID != 0)
 	{
 		glGetShaderiv(shaderID, GL_COMPILE_STATUS, &success);
 		if (!success)

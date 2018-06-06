@@ -1,4 +1,5 @@
-#pragma once
+#ifndef MYSHADER_H
+#define MYSHADER_H
 
 #include "glad\glad.h"
 #include "GLFW\glfw3.h"
@@ -7,7 +8,7 @@
 
 class MyShader
 {
-private:
+public:	
 	/// enum specifying types of shaders
 	enum MyShaderType
 	{
@@ -15,8 +16,7 @@ private:
 		Vertex = GL_VERTEX_SHADER,
 		Fragment = GL_FRAGMENT_SHADER
 	};
-
-public:	
+	
 	/**
 	* @brief constructor
 	*/
@@ -75,8 +75,19 @@ public:
 		return shaderID;
 	}
 
+	/**
+	* @brief method to get shader type 
+	* @return const MyShaderType - enum for the type of the shader
+	*/
+	const MyShaderType getShaderType() const
+	{
+		return shaderType;
+	}
+
 private:
 	unsigned int shaderID; //!< unique id of shader in OpenGL
 	char* shaderData; //!< string denoting program of the shader
 	MyShaderType shaderType; //!< type of shader
 };
+
+#endif

@@ -36,3 +36,5 @@ subset of OpenGL state
 18. Vertex Attribute 		   - Inputs to a vertex shader
 19. Swizzling				   - using the components of vertex container in shader using 
 								 identifiers x,y,z,w
+20. Fragment Interpolation	   - Fragment shader automatically interpolates the colors based on the 
+								 output of vertex shader. For ex - See HelloTriangle

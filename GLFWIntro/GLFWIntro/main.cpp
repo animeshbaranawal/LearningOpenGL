@@ -4,6 +4,7 @@
 #include <iostream>
 
 #include "Shader\MyShader.h"
+#include "Shader\MyShaderProgram.h"
 #include "Callback\callback_functions.h"
 #include "utils.h"
 
@@ -36,8 +37,7 @@ int main()
 	float verticesAndColors[] = {
 		-0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f,
 		0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,
-		0.0f,  0.5f, 0.0f, 0.0f, 0.0f, 1.0f,
-		1.0f, 0.5f, 0.0f, 0.5f, 0.5f, 0.5f
+		0.0f,  0.5f, 0.0f, 0.0f, 0.0f, 1.0f
 	};
 
 	unsigned int indices[] = {
@@ -98,15 +98,11 @@ int main()
 	}
 
 	/// create a shader program
-	unsigned int shaderProgram;
-	shaderProgram = glCreateProgram();
-	glAttachShader(shaderProgram, shader1.getShaderID());
-	glAttachShader(shaderProgram, shader2.getShaderID());
-	glLinkProgram(shaderProgram);
-	glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
+	MyShaderProgram shaderProgramObject(&shader1, &shader2);
+	shaderProgramObject.linkShaderProgram();
+	shaderProgramObject.getShaderLinkingStatus(success, &debugData, 512);
 	if (!success)
 	{
-		glGetProgramInfoLog(shaderProgram, 512, NULL, debugData);
 		std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << debugData;
 	}
 
@@ -117,17 +113,17 @@ int main()
 		
 		double time = glfwGetTime();
 		double greenTint = (sin(time) / 2.0f) + 0.5f;
-		int uniformColorPos = glGetUniformLocation(shaderProgram, "timeColor");
+		int uniformColorPos = glGetUniformLocation(shaderProgramObject.getProgramID(), "timeColor");
 		
 		/// draw object
-		glUseProgram(shaderProgram);
+		shaderProgramObject.use();
 		if (uniformColorPos != -1)
 		{
 			glUniform3f(uniformColorPos, greenTint, greenTint, greenTint);
 		}
 
 		glBindVertexArray(VAO);
-		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
 		processEvent(window);
 		
 		/// stub rendering events		
