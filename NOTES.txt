@@ -33,3 +33,6 @@ subset of OpenGL state
 								 the buffer object.
 17. Element Array Objects (EAO)- GL objects which store the order of vertices in which
 								 to be connected.
+18. Vertex Attribute 		   - Inputs to a vertex shader
+19. Swizzling				   - using the components of vertex container in shader using 
+								 identifiers x,y,z,w

@@ -13,33 +13,45 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\Callback">
+      <UniqueIdentifier>{5dcb26f7-23a6-4470-bb13-83d156d51b56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Shader">
+      <UniqueIdentifier>{8e24d9ee-37a0-4c86-af23-88c8fc2091ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Callback">
+      <UniqueIdentifier>{a7672c5d-f46b-47dd-bc4e-25466e4a9469}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Shader">
+      <UniqueIdentifier>{d69d2866-6e89-4866-af05-337b7da9550e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="callback_functions.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="glad.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MyShader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="utils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Callback\callback_functions.cpp">
+      <Filter>Source Files\Callback</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader\MyShader.cpp">
+      <Filter>Source Files\Shader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="callback_functions.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MyShader.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Callback\callback_functions.h">
+      <Filter>Header Files\Callback</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader\MyShader.h">
+      <Filter>Header Files\Shader</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
