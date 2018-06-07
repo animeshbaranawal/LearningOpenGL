@@ -14,6 +14,10 @@ MyShader::~MyShader()
 	{
 		glDeleteShader(shaderID);
 	}
+	else
+	{
+		ERROR_LOG("ERROR::MYSHADER::DELETION_FAILED", "Could not shader with 0 ID!");
+	}
 }
 
 void MyShader::readShaderFromString(std::string shaderSource)
@@ -35,6 +39,10 @@ bool MyShader::setShaderTypeAsVertex()
 		shaderType = MyShaderType::Vertex;
 		success = true;
 	}
+	else
+	{
+		ERROR_LOG("ERROR::MYSHADER::SET_VERTEXTYPE_FAILED", "Shader type has already been set!");
+	}
 	return success;
 }
 
@@ -45,6 +53,10 @@ bool MyShader::setShaderTypeAsFragment()
 	{
 		shaderType = MyShaderType::Fragment;
 		success = true;
+	}
+	else
+	{
+		ERROR_LOG("ERROR::MYSHADER::SET_FRAGMENTTYPE_FAILED", "Shader type has already been set!");
 	}
 	return success;
 }
@@ -63,6 +75,10 @@ bool MyShader::compileShader()
 		glCompileShader(shaderID);
 		success = true;
 	}
+	else
+	{
+		ERROR_LOG("ERROR::MYSHADER::COMPILATION_FAILED", "Cannot re-compile a shader");
+	}
 
 	return success;
 }
@@ -79,5 +95,10 @@ void MyShader::getShaderCompilationStatus(int& success, char** logMessage, unsig
 
 			glGetShaderInfoLog(shaderID, logLength, NULL, *logMessage);
 		}
+	}
+	else
+	{
+		ERROR_LOG("ERROR::MYSHADER::GET_COMPILATION_STATUS_FAILED", 
+			"Cannot get compilation status of 0 ID shader!");
 	}
 }

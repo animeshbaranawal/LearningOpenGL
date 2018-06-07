@@ -19,7 +19,7 @@ int main()
 	GLFWwindow* window = glfwCreateWindow(400, 400, "Learning OpenGL", NULL, NULL);
 	if (window == NULL)
 	{
-		std::cout << "Failed to create GLFW window" << std::endl;
+		ERROR_LOG("ERROR::GLFW", "Could not create window!");
 		glfwTerminate();
 		return -1;
 	}
@@ -27,7 +27,7 @@ int main()
 
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
-		std::cout << "Failed to initialize GLAD" << std::endl;
+		ERROR_LOG("ERROR::GLAD", "Could not initialise glad!");
 		return -1;
 	}
 
@@ -83,7 +83,7 @@ int main()
 	shader1.getShaderCompilationStatus(success, &debugData, 512);
 	if (!success)
 	{
-		std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << debugData;
+		ERROR_LOG("ERROR::MYSHADER::COMPILATION_FAILED", debugData);
 	}
 
 	/// create a fragment shader from fragment shader source file
@@ -94,7 +94,7 @@ int main()
 	shader2.getShaderCompilationStatus(success, &debugData, 512);
 	if (!success)
 	{
-		std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << debugData;
+		ERROR_LOG("ERROR::MYSHADER::COMPILATION_FAILED", debugData);
 	}
 
 	/// create a shader program
@@ -103,7 +103,7 @@ int main()
 	shaderProgramObject.getShaderLinkingStatus(success, &debugData, 512);
 	if (!success)
 	{
-		std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << debugData;
+		ERROR_LOG("ERROR::MYSHADERPROGRAM::LINKING_FAILED", debugData);
 	}
 
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);

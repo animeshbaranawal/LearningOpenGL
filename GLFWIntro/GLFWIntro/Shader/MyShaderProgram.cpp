@@ -1,5 +1,6 @@
 #include "MyShaderProgram.h"
 #include "MyShader.h"
+#include "utils.h"
 
 MyShaderProgram::MyShaderProgram(const MyShader* myVertexShader, const MyShader* myFragmentShader)
 {
@@ -13,10 +14,15 @@ bool MyShaderProgram::linkShaderProgram()
 	MyShader::MyShaderType vertexShaderType = MyShader::None;
 	MyShader::MyShaderType fragmentShaderType = MyShader::None;
 
-	if (vertexShader)
+	if (vertexShader &&  vertexShader->getShaderID())
 		vertexShaderType = vertexShader->getShaderType();
-	if (fragmentShader)
+	else
+		ERROR_LOG("ERROR::MYSHADERPROGRAM::LINKING_FAILED", "Vertex shader has not been set properly");
+
+	if (fragmentShader && fragmentShader->getShaderID())
 		fragmentShaderType = fragmentShader->getShaderType();
+	else
+		ERROR_LOG("ERROR::MYSHADERPROGRAM::LINKING_FAILED", "Fragment shader has not been set properly");
 
 	bool success = false;
 	if (!ID)
@@ -29,6 +35,10 @@ bool MyShaderProgram::linkShaderProgram()
 			glLinkProgram(ID);
 			success = true;
 		}
+	}
+	else
+	{
+		ERROR_LOG("ERROR::MYSHADERPROGRAM::LINKING_FAILED", "Cannot relink a shader program!");
 	}
 
 	return success;
@@ -47,10 +57,17 @@ void MyShaderProgram::getShaderLinkingStatus(int& linkingSuccess, char** logMess
 			glGetProgramInfoLog(ID, logLength, NULL, *logMessage);
 		}
 	}
+	else
+	{
+		ERROR_LOG("ERROR::MYSHADERPROGRAM::GET_LINKING_STATUS_FAILED",
+			"Cannot get linking status of a 0 ID shader program!");
+	}
 }
 
 void MyShaderProgram::use()
 {
-	if(ID != 0)
+	if (ID != 0)
 		glUseProgram(ID);
+	else
+		ERROR_LOG("ERROR::MYSHADERPROGRAM::USE_FAILED", "Cannot use a 0 ID shader program!");
 }
