@@ -1,10 +1,15 @@
 #version 330 core
-uniform vec3 timeColor;
 in vec3 color;
+in vec2 texCoord;
+
+uniform sampler2D ourTexture1;
+uniform sampler2D ourTexture2;
+uniform float ratio;
 
 out vec4 fragColor;
 
 void main()
 {
-	fragColor = vec4(color, 1.0f);
+	vec2 newTexCoord = vec2(1.0f - texCoord.x, texCoord.y);
+	fragColor = mix(texture(ourTexture1, texCoord), texture(ourTexture2, newTexCoord), ratio) * vec4(color, 1.0f);
 }

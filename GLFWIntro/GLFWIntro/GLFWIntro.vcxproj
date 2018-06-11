@@ -124,12 +124,14 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Shader\MyShader.cpp" />
     <ClCompile Include="Shader\MyShaderProgram.cpp" />
+    <ClCompile Include="stb_image.cpp" />
     <ClCompile Include="utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Callback\callback_functions.h" />
     <ClInclude Include="Shader\MyShader.h" />
     <ClInclude Include="Shader\MyShaderProgram.h" />
+    <ClInclude Include="stb_image.h" />
     <ClInclude Include="utils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

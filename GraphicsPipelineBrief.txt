@@ -21,3 +21,14 @@ Buffers and Bindings
 3. Third, we fill the buffer by copying the user data using glBufferData
 
 NOTE: GL_STATIC_DRAW vs GL_DYNAMIC_DRAW vs GL_STREAM_DRAW
+
+Texture Wrapping and other details
+----------------------------------
+
+On assigning a texture coordinate outside the (0,0) to (1,1) space,
+openGL does texture repetition as per user assigned inputs.
+
+Texture units are interesting as in they allow multiple textures in our fragment shader.
+We first activate a texture unit and bind the texture.
+We then assign the uniform variable of the texture sampler with the 
+corresponding texture unit number.

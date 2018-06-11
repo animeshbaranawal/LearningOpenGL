@@ -7,6 +7,19 @@
 #include "Shader\MyShaderProgram.h"
 #include "Callback\callback_functions.h"
 #include "utils.h"
+#include "stb_image.h"
+
+void processUpDown(GLFWwindow* window, float& ratio)
+{
+	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+	{
+		if (ratio < 1.0f) ratio += 0.001f;
+	}
+	else if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+	{
+		if (ratio > 0.0f) ratio -= 0.001f;
+	}
+}
 
 int main()
 {
@@ -34,15 +47,17 @@ int main()
 	glViewport(0, 0, 400, 400);
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 	
-	float verticesAndColors[] = {
-		-0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f,
-		0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,
-		0.0f,  0.5f, 0.0f, 0.0f, 0.0f, 1.0f
+	float vertices[] = {
+		// positions          // colors           // texture coords
+		0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
+		0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
+		-0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
+		-0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // top left 
 	};
 
 	unsigned int indices[] = {
 		0, 1, 2,
-		1, 2, 3
+		0, 2, 3
 	};
 
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
@@ -50,9 +65,6 @@ int main()
 	/// create a data buffer and copy data
 	unsigned int VBO_points;
 	glGenBuffers(1, &VBO_points);
-
-	unsigned int VBO_colors;
-	glGenBuffers(1, &VBO_colors);
 
 	unsigned int EBO;
 	glGenBuffers(1, &EBO);
@@ -62,15 +74,15 @@ int main()
 	glGenVertexArrays(1, &VAO);
 	glBindVertexArray(VAO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO_points);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(verticesAndColors), verticesAndColors, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(0));
-	glBindBuffer(GL_ARRAY_BUFFER, VBO_colors);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(verticesAndColors), verticesAndColors, GL_STATIC_DRAW);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(0));
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
 	glEnableVertexAttribArray(0);
 	glEnableVertexAttribArray(1);
+	glEnableVertexAttribArray(2);
 	
 	/// create vertex shader from vertex shader source file
 	MyShader shader1;
@@ -106,26 +118,56 @@ int main()
 		ERROR_LOG("ERROR::MYSHADERPROGRAM::LINKING_FAILED", debugData);
 	}
 
+	/// texture FUN
+	unsigned int texture1, texture2;
+	
+	glGenTextures(1, &texture1);
+	glBindTexture(GL_TEXTURE_2D, texture1);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	
+	int width, height, nrChannels;
+	stbi_set_flip_vertically_on_load(true);
+	unsigned char *data = stbi_load("container.jpg", &width, &height, &nrChannels, 0);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+	glGenerateMipmap(GL_TEXTURE_2D);
+	stbi_image_free(data);
+	
+	glGenTextures(1, &texture2);
+	glBindTexture(GL_TEXTURE_2D, texture2);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	data = stbi_load("awesomeface.png", &width, &height, &nrChannels, 0);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+	glGenerateMipmap(GL_TEXTURE_2D);
+	stbi_image_free(data);
+
+	float ratio = 0.0f;
+
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	while (!glfwWindowShouldClose(window))
 	{
 		glClear(GL_COLOR_BUFFER_BIT);
 		
-		double time = glfwGetTime();
-		double greenTint = (sin(time) / 2.0f) + 0.5f;
-		int uniformColorPos = glGetUniformLocation(shaderProgramObject.getProgramID(), "timeColor");
-		
 		/// draw object
 		shaderProgramObject.use();
-		if (uniformColorPos != -1)
-		{
-			glUniform3f(uniformColorPos, greenTint, greenTint, greenTint);
-		}
+		glUniform1f(glGetUniformLocation(shaderProgramObject.getProgramID(), "ratio"), ratio);
+		glUniform1i(glGetUniformLocation(shaderProgramObject.getProgramID(), "ourTexture1"), 0);
+		glUniform1i(glGetUniformLocation(shaderProgramObject.getProgramID(), "ourTexture2"), 1);
 
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, texture1);
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, texture2);
 		glBindVertexArray(VAO);
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		processEvent(window);
-		
+		processUpDown(window, ratio);
+
 		/// stub rendering events		
 		glfwSwapBuffers(window);
 		glfwPollEvents();

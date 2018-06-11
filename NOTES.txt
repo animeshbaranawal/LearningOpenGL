@@ -38,3 +38,6 @@ subset of OpenGL state
 								 identifiers x,y,z,w
 20. Fragment Interpolation	   - Fragment shader automatically interpolates the colors based on the 
 								 output of vertex shader. For ex - See HelloTriangle
+21. Texture					   - A 1D, 2D or nD image used to assign colors to objects in GL
+22. Texture coordinate		   - A point in the texture space
+23. Texture unit			   - location of the texture sampler in fragment shader
