@@ -13,57 +13,69 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Header Files\Callback">
-      <UniqueIdentifier>{5dcb26f7-23a6-4470-bb13-83d156d51b56}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Shader">
-      <UniqueIdentifier>{8e24d9ee-37a0-4c86-af23-88c8fc2091ba}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Callback">
-      <UniqueIdentifier>{a7672c5d-f46b-47dd-bc4e-25466e4a9469}</UniqueIdentifier>
+    <Filter Include="Header Files\Utils">
+      <UniqueIdentifier>{27134109-72af-4807-a2ca-8129cff22aa7}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Shader">
-      <UniqueIdentifier>{d69d2866-6e89-4866-af05-337b7da9550e}</UniqueIdentifier>
+      <UniqueIdentifier>{450115df-f42f-4a99-bca8-663a75080eec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Utils">
+      <UniqueIdentifier>{e916fc87-746c-4f83-a80e-548f0c2a139e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Shader">
+      <UniqueIdentifier>{541e89ac-c2df-4721-97b5-26f56cd496a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Texture">
+      <UniqueIdentifier>{f838aef5-5a72-4d5b-aa66-bab766f76980}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Texture">
+      <UniqueIdentifier>{42afcb03-d469-416f-b2ab-2256f6f5df4c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="MyEngine\Shader\MyShader.h">
+      <Filter>Header Files\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="MyEngine\Shader\MyShaderProgram.h">
+      <Filter>Header Files\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="MyEngine\Utils\callback_functions.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="MyEngine\Utils\stb_image.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="MyEngine\Utils\utils.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="MyEngine\Texture\MyTexture2D.h">
+      <Filter>Header Files\Texture</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="MyEngine\Utils\callback_functions.cpp">
+      <Filter>Source Files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="MyEngine\Utils\glad.c">
+      <Filter>Source Files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="MyEngine\Utils\stb_image.cpp">
+      <Filter>Source Files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="MyEngine\Utils\utils.cpp">
+      <Filter>Source Files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="MyEngine\Shader\MyShader.cpp">
+      <Filter>Source Files\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="MyEngine\Shader\MyShaderProgram.cpp">
+      <Filter>Source Files\Shader</Filter>
+    </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="glad.c">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="MyEngine\Texture\MyTexture2D.cpp">
+      <Filter>Source Files\Texture</Filter>
     </ClCompile>
-    <ClCompile Include="utils.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Callback\callback_functions.cpp">
-      <Filter>Source Files\Callback</Filter>
-    </ClCompile>
-    <ClCompile Include="Shader\MyShader.cpp">
-      <Filter>Source Files\Shader</Filter>
-    </ClCompile>
-    <ClCompile Include="Shader\MyShaderProgram.cpp">
-      <Filter>Source Files\Shader</Filter>
-    </ClCompile>
-    <ClCompile Include="stb_image.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="utils.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Callback\callback_functions.h">
-      <Filter>Header Files\Callback</Filter>
-    </ClInclude>
-    <ClInclude Include="Shader\MyShader.h">
-      <Filter>Header Files\Shader</Filter>
-    </ClInclude>
-    <ClInclude Include="Shader\MyShaderProgram.h">
-      <Filter>Header Files\Shader</Filter>
-    </ClInclude>
-    <ClInclude Include="stb_image.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>

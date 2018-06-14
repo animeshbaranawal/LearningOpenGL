@@ -1,5 +1,5 @@
 #include "MyShader.h"
-#include "utils.h"
+#include "Utils\utils.h"
 
 MyShader::MyShader()
 {
@@ -10,7 +10,7 @@ MyShader::MyShader()
 
 MyShader::~MyShader()
 {
-	if (!shaderID)
+	if (shaderID != 0)
 	{
 		glDeleteShader(shaderID);
 	}

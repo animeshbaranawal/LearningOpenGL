@@ -5,9 +5,10 @@
 
 #include "Shader\MyShader.h"
 #include "Shader\MyShaderProgram.h"
-#include "Callback\callback_functions.h"
-#include "utils.h"
-#include "stb_image.h"
+#include "Texture\MyTexture2D.h"
+#include "Utils\callback_functions.h"
+#include "Utils\utils.h"
+#include "Utils\stb_image.h"
 
 void processUpDown(GLFWwindow* window, float& ratio)
 {
@@ -119,31 +120,20 @@ int main()
 	}
 
 	/// texture FUN
-	unsigned int texture1, texture2;
-	
-	glGenTextures(1, &texture1);
-	glBindTexture(GL_TEXTURE_2D, texture1);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	
+	MyTexture2D textureObject1, textureObject2;
 	int width, height, nrChannels;
 	stbi_set_flip_vertically_on_load(true);
 	unsigned char *data = stbi_load("container.jpg", &width, &height, &nrChannels, 0);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-	glGenerateMipmap(GL_TEXTURE_2D);
+
+	textureObject1.setTextureSize(width, height);
+	textureObject1.setTexture(data, GL_RGB, GL_UNSIGNED_BYTE);
+	textureObject1.setProperties();
 	stbi_image_free(data);
 	
-	glGenTextures(1, &texture2);
-	glBindTexture(GL_TEXTURE_2D, texture2);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	data = stbi_load("awesomeface.png", &width, &height, &nrChannels, 0);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-	glGenerateMipmap(GL_TEXTURE_2D);
+	textureObject2.setTextureSize(width, height);
+	textureObject2.setTexture(data, GL_RGBA, GL_UNSIGNED_BYTE);
+	textureObject2.setProperties();
 	stbi_image_free(data);
 
 	float ratio = 0.0f;
@@ -159,10 +149,8 @@ int main()
 		glUniform1i(glGetUniformLocation(shaderProgramObject.getProgramID(), "ourTexture1"), 0);
 		glUniform1i(glGetUniformLocation(shaderProgramObject.getProgramID(), "ourTexture2"), 1);
 
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, texture1);
-		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D, texture2);
+		textureObject1.activateTexture();
+		textureObject2.activateTexture(1);
 		glBindVertexArray(VAO);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		processEvent(window);

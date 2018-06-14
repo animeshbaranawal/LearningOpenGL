@@ -1,6 +1,6 @@
 #include "MyShaderProgram.h"
 #include "MyShader.h"
-#include "utils.h"
+#include "Utils\utils.h"
 
 MyShaderProgram::MyShaderProgram(const MyShader* myVertexShader, const MyShader* myFragmentShader)
 {
