@@ -74,3 +74,15 @@ void readFile(const char* path, char** fileData)
 	t.read(*fileData, length);
 	t.close();
 }
+
+bool isFileExists(const char* path)
+{
+	/// SOURCE: https://stackoverflow.com/questions/12774207/fastest-way-to-check-if-a-file-exist-using-standard-c-c11-c
+	if (FILE *file = fopen(path, "r")) {
+		fclose(file);
+		return true;
+	}
+	else {
+		return false;
+	}
+}

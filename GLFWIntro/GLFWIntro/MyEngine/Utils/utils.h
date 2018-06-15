@@ -20,3 +20,9 @@ void log(const char *ppFile, int ppLine, const std::string &what, const std::str
 * @param char* - file data read
 */
 void readFile(const char* path, char** fileData);
+
+/**
+* @brief checks if the given path is a valid file
+* @return bool - true if file exists
+*/
+bool isFileExists(const char* path);

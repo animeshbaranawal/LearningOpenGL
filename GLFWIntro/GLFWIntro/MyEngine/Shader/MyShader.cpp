@@ -28,7 +28,12 @@ void MyShader::readShaderFromString(std::string shaderSource)
 
 void MyShader::readShaderFromFile(std::string shaderSourceFile)
 {
-	readFile(shaderSourceFile.c_str(), &shaderData);
+	if(isFileExists(shaderSourceFile.c_str()))
+		readFile(shaderSourceFile.c_str(), &shaderData);
+	else
+	{
+		ERROR_LOG("ERROR::MYSHADER::READ_FILE", "File does not exists!");
+	}
 }
 
 bool MyShader::setShaderTypeAsVertex()
@@ -64,20 +69,27 @@ bool MyShader::setShaderTypeAsFragment()
 bool MyShader::compileShader()
 {
 	bool success = false;
-	if (!shaderID)
+	if (shaderData)
 	{
-		if (shaderType == MyShader::None)
+		if (!shaderID)
 		{
-			return success;
+			if (shaderType == MyShader::None)
+			{
+				return success;
+			}
+			shaderID = glCreateShader(shaderType);
+			glShaderSource(shaderID, 1, &shaderData, NULL);
+			glCompileShader(shaderID);
+			success = true;
 		}
-		shaderID = glCreateShader(shaderType);
-		glShaderSource(shaderID, 1, &shaderData, NULL);
-		glCompileShader(shaderID);
-		success = true;
+		else
+		{
+			ERROR_LOG("ERROR::MYSHADER::COMPILATION_FAILED", "Cannot re-compile a shader");
+		}
 	}
 	else
 	{
-		ERROR_LOG("ERROR::MYSHADER::COMPILATION_FAILED", "Cannot re-compile a shader");
+		ERROR_LOG("ERROR::MYSHADER::COMPILATION_FAILED", "Cannot compile with 0 data!");
 	}
 
 	return success;
