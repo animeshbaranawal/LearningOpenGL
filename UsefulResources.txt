@@ -2,3 +2,5 @@ Useful Resources
 ----------------
 
 1. Description about Vertex Array Objects : http://antongerdelan.net/opengl/vertexbuffers.html
+2. Linear Algebra brush-up: 3Blue1Brown LA series
+3. http://www.songho.ca/opengl/gl_projectionmatrix.html

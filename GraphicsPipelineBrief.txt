@@ -32,3 +32,21 @@ Texture units are interesting as in they allow multiple textures in our fragment
 We first activate a texture unit and bind the texture.
 We then assign the uniform variable of the texture sampler with the 
 corresponding texture unit number.
+
+Coordinate Systems
+------------------
+1. Local space  |
+2. World Space  | - Model Matrix
+3. Eye Space    | - View Matrix
+4. Clip Space   | - Projection Matrix -------------
+5. Screen space | - glViewport                   ||
+                                                 ||
+												 \/
+			-----------------------------------------------------------------------------------								
+            |                                                                                 |
+           \ /                                                                               \ /
+			|                                                                                 |
+Orthographic Projection                                                             Perspective Projection  
+Frustum is a cube.  Takes 6                                                    Frustum is a part of a pyramid. Takes 5
+inputs- left, right, up, down,                                                 inputs - angle of perspective, ratio of width-height,
+near plane and far plane.                                                      near plane and far plane.

@@ -41,3 +41,16 @@ subset of OpenGL state
 21. Texture					   - A 1D, 2D or nD image used to assign colors to objects in GL
 22. Texture coordinate		   - A point in the texture space
 23. Texture unit			   - location of the texture sampler in fragment shader
+24. Transform & Matrix		   - Utilities to perform operation on a mesh object
+25. Homogeneous coordinate	   - the w coordinate in the 4D openGL vector; 1 implies its a position
+								 and 0 implies its a direction. Very important concept!
+26. Viewport transform		   - Transform matrix taking object coordinate system from clip space
+								 to screen space.
+27. Model matrix			   - The transform matrix defining the relationship between local space
+								 and world space.
+28. Projection matrix 		   - The transform matrix defining the relationship between view space and
+								 clip space.
+29. Depth buffer			   - Just like color buffer storing color values at individual pixels,
+								 depth buffer stores z values of individual pixels for depth testing.
+30. Depth testing			   - A technique in which when the color values of far objects are not overwritten
+								 on color values of near objects.
