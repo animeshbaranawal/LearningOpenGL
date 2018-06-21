@@ -1,7 +1,6 @@
 #include "MyTexture2D.h"
 
 #include "Utils\utils.h"
-#include "Utils\stb_image.h"
 
 MyTexture2D::MyTexture2D()
 {

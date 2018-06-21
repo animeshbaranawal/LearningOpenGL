@@ -31,6 +31,12 @@
     <Filter Include="Source Files\Texture">
       <UniqueIdentifier>{42afcb03-d469-416f-b2ab-2256f6f5df4c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Camera">
+      <UniqueIdentifier>{2d5a985d-19ec-4fdf-9529-cd25339acb93}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Camera">
+      <UniqueIdentifier>{7f02b7a6-4986-401b-a238-e72dad0a8660}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MyEngine\Shader\MyShader.h">
@@ -50,6 +56,12 @@
     </ClInclude>
     <ClInclude Include="MyEngine\Texture\MyTexture2D.h">
       <Filter>Header Files\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="MyEngine\Camera\MyCamera.h">
+      <Filter>Header Files\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="MyEngine\Utils\globals.h">
+      <Filter>Header Files\Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -76,6 +88,9 @@
     </ClCompile>
     <ClCompile Include="MyEngine\Texture\MyTexture2D.cpp">
       <Filter>Source Files\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="MyEngine\Camera\MyCamera.cpp">
+      <Filter>Source Files\Camera</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

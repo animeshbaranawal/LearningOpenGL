@@ -19,15 +19,18 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="MyEngine\Camera\MyCamera.h" />
     <ClInclude Include="MyEngine\Shader\MyShader.h" />
     <ClInclude Include="MyEngine\Shader\MyShaderProgram.h" />
     <ClInclude Include="MyEngine\Texture\MyTexture2D.h" />
     <ClInclude Include="MyEngine\Utils\callback_functions.h" />
+    <ClInclude Include="MyEngine\Utils\globals.h" />
     <ClInclude Include="MyEngine\Utils\stb_image.h" />
     <ClInclude Include="MyEngine\Utils\utils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MyEngine\Camera\MyCamera.cpp" />
     <ClCompile Include="MyEngine\Shader\MyShader.cpp" />
     <ClCompile Include="MyEngine\Shader\MyShaderProgram.cpp" />
     <ClCompile Include="MyEngine\Texture\MyTexture2D.cpp" />

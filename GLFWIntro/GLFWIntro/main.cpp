@@ -6,13 +6,19 @@
 #include "Shader\MyShader.h"
 #include "Shader\MyShaderProgram.h"
 #include "Texture\MyTexture2D.h"
+#include "Camera\MyCamera.h"
+
 #include "Utils\callback_functions.h"
 #include "Utils\utils.h"
 #include "Utils\stb_image.h"
+#include "Utils\globals.h"
 
 #include "glm\glm.hpp"
 #include "glm\gtc\matrix_transform.hpp"
 #include "glm\gtc\type_ptr.hpp"
+
+float delta_time = 0.0f;
+float last_frame;
 
 void processUpDown(GLFWwindow* window, float& ratio, float& angle_z, float& angle_x)
 {
@@ -194,9 +200,10 @@ int main()
 	stbi_image_free(data);
 
 	/// Coordinate System FUN
-	glm::mat4 view;
-	// note that we're translating the scene in the reverse direction of where we want to move
-	view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+	MyCamera* camera = MyCamera::getInstance();
+	camera->setCameraWindow(window);
+	camera->switchMode(MyCamera::FORWARD_LOOKING);
+
 	glm::mat4 projection;
 	projection = glm::perspective(glm::radians(45.0f), 400.0f / 400.0f, 0.1f, 100.0f);
 
@@ -205,6 +212,7 @@ int main()
 	float angle_x = 0.0f;
 
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	last_frame = glfwGetTime();
 	while (!glfwWindowShouldClose(window))
 	{
 		glm::mat4 model;
@@ -227,6 +235,13 @@ int main()
 			1, GL_FALSE, glm::value_ptr(model));
 		glUniformMatrix4fv(glGetUniformLocation(shaderProgramObject.getProgramID(), "projection"),
 			1, GL_FALSE, glm::value_ptr(projection));
+		
+		/// view matrix fun
+		float currentFrame = glfwGetTime();
+		delta_time = currentFrame - last_frame;
+		last_frame = currentFrame;
+		glm::mat4 view = camera->getViewMatrix();
+		
 		glUniformMatrix4fv(glGetUniformLocation(shaderProgramObject.getProgramID(), "view"),
 			1, GL_FALSE, glm::value_ptr(view));
 

@@ -50,3 +50,18 @@ Orthographic Projection                                                         
 Frustum is a cube.  Takes 6                                                    Frustum is a part of a pyramid. Takes 5
 inputs- left, right, up, down,                                                 inputs - angle of perspective, ratio of width-height,
 near plane and far plane.                                                      near plane and far plane.
+
+
+Camera in Rendering Systems
+---------------------------
+
+A camera points towards negative z axis.
+
+A camera is defines using three vectors:
+1. Direction vector : Normalized vector ( Camera Position  - Camera Target )
+   NOTE: Direction name is a misnomer. It is a vector pointing to the camera, not a vector alongwhich
+		 camera points.
+2. Right axis : Vector representing positive x axis of the camera.
+   We first define poisitive y axis and then take cross product with direction vector.
+3. Up axis : Represents positive y axis of the camera. 
+   Take cross product of direction vector and right axis.
