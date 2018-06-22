@@ -63,6 +63,12 @@
     <ClInclude Include="MyEngine\Utils\globals.h">
       <Filter>Header Files\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="MyEngine\Camera\MyForwardCamera.h">
+      <Filter>Header Files\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="MyEngine\Camera\MyEulerCamera.h">
+      <Filter>Header Files\Camera</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MyEngine\Utils\callback_functions.cpp">
@@ -90,6 +96,15 @@
       <Filter>Source Files\Texture</Filter>
     </ClCompile>
     <ClCompile Include="MyEngine\Camera\MyCamera.cpp">
+      <Filter>Source Files\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="MyEngine\Utils\globals.cpp">
+      <Filter>Source Files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="MyEngine\Camera\MyForwardCamera.cpp">
+      <Filter>Source Files\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="MyEngine\Camera\MyEulerCamera.cpp">
       <Filter>Source Files\Camera</Filter>
     </ClCompile>
   </ItemGroup>

@@ -8,21 +8,6 @@
 class MyCamera
 {
 public:
-	/// enum defining different camera modes
-	enum CameraMode
-	{
-		NONE = 0,
-		FIXED_LOOKING = 1, /// mode in which camera looks towards a point
-		FORWARD_LOOKING = 2 /// mode in which camera always looks forward
-	};
-
-	/**
-	* @brief We define MyCamera as a singleton class
-	*		 API to return an instance of MyCamera class
-	* @return MyCamera* - instance of MyCamera class
-	*/
-	static MyCamera* getInstance();
-
 	/**
 	* @brief destroys the instance of camera
 	*/
@@ -38,33 +23,64 @@ public:
 	}
 
 	/**
-	* @brief switches camera working mode
-	* @param CameraMode - enum defining new camera mode
-	*/
-	void switchMode(CameraMode newMode);
-
-	/**
 	* @brief method to get view matrix of camera
 	* @return const glm::mat4 - view matrix of camera
 	*/
-	const glm::mat4 getViewMatrix();
+	virtual const glm::mat4 getViewMatrix() = 0;
 
-private:
+	/// Callback functions for processing mouse events in camera
+	virtual void processMouseEvent(GLFWwindow* window, double xpos, double ypos) = 0;
+	virtual void processScrollEvent(GLFWwindow* window, double xOffset, double yOffset) = 0;
+
+protected:
 	/// private constructor
 	MyCamera();
 
 	/// private destructor
-	~MyCamera();
+	virtual ~MyCamera();
 
-	/// process events
-	void processEvent();
+	/// process keyboard events
+	virtual void processEvent() = 0;
 
 	static MyCamera* camera; //!< instance of MyCamera class
 	glm::vec3 cameraPosition; //!< position of camera in world space
 	glm::vec3 cameraTarget; //!< position of target towards which camera is pointing
 	glm::vec3 cameraUpAxis; //!< vec3 defining up axis of camera
-	CameraMode mode; //!< mode in which camera is working
+	
 	GLFWwindow* cameraWindow; //!< window in which camera is working
+};
+
+class MyFixedCamera : public MyCamera 
+{
+public:
+	/**
+	* @brief We define MyCamera as a singleton class
+	*		 API to return an instance of MyCamera class
+	* @return MyCamera* - instance of MyCamera class
+	*/
+	static MyCamera* getInstance();
+
+	/**
+	* @brief method to get view matrix of camera
+	* @return const glm::mat4 - view matrix of camera
+	*/
+	virtual const glm::mat4 getViewMatrix();
+
+	virtual void processMouseEvent(GLFWwindow* window, double xpos, double ypos){}
+
+	virtual void processScrollEvent(GLFWwindow* window, double xOffset, double yOffset) {}
+
+protected:
+	MyFixedCamera();
+
+	virtual ~MyFixedCamera();
+
+	virtual void processEvent();
+
+	struct Function
+	{
+		void operator()(int a) {}
+	};
 };
 
 #endif

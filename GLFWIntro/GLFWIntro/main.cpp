@@ -2,11 +2,12 @@
 #include "GLFW\glfw3.h"
 
 #include <iostream>
+#include <functional>
 
 #include "Shader\MyShader.h"
 #include "Shader\MyShaderProgram.h"
 #include "Texture\MyTexture2D.h"
-#include "Camera\MyCamera.h"
+#include "Camera\MyEulerCamera.h"
 
 #include "Utils\callback_functions.h"
 #include "Utils\utils.h"
@@ -16,9 +17,6 @@
 #include "glm\glm.hpp"
 #include "glm\gtc\matrix_transform.hpp"
 #include "glm\gtc\type_ptr.hpp"
-
-float delta_time = 0.0f;
-float last_frame;
 
 void processUpDown(GLFWwindow* window, float& ratio, float& angle_z, float& angle_x)
 {
@@ -54,7 +52,7 @@ int main()
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
+	
 	/// creating a new window for OpenGL
 	GLFWwindow* window = glfwCreateWindow(400, 400, "Learning OpenGL", NULL, NULL);
 	if (window == NULL)
@@ -64,6 +62,7 @@ int main()
 		return -1;
 	}
 	glfwMakeContextCurrent(window);
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
@@ -200,9 +199,8 @@ int main()
 	stbi_image_free(data);
 
 	/// Coordinate System FUN
-	MyCamera* camera = MyCamera::getInstance();
+	MyCamera* camera = MyEulerCamera::getInstance();
 	camera->setCameraWindow(window);
-	camera->switchMode(MyCamera::FORWARD_LOOKING);
 
 	glm::mat4 projection;
 	projection = glm::perspective(glm::radians(45.0f), 400.0f / 400.0f, 0.1f, 100.0f);
@@ -210,6 +208,7 @@ int main()
 	float ratio = 0.0f;
 	float angle_z = 0.0f;
 	float angle_x = 0.0f;
+	double mouseX, mouseY, XOffset, YOffset;
 
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	last_frame = glfwGetTime();
@@ -237,6 +236,9 @@ int main()
 			1, GL_FALSE, glm::value_ptr(projection));
 		
 		/// view matrix fun
+		glfwGetCursorPos(window, &mouseX, &mouseY);
+		camera->processMouseEvent(window, mouseX, mouseY);
+
 		float currentFrame = glfwGetTime();
 		delta_time = currentFrame - last_frame;
 		last_frame = currentFrame;
@@ -248,6 +250,7 @@ int main()
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 
+		
 		processEvent(window);
 		processUpDown(window, ratio, angle_z, angle_x);
 
