@@ -2,16 +2,23 @@
 #define SPHERE_H
 
 #include "hitable.h"
+#include "material.h"
 
 class Sphere : public Hitable
 {
 public:
 	Sphere(){}
 
-	Sphere(glm::vec3 center, float radius)
+	Sphere(glm::vec3 center, float radius, Material* material)
 	{
 		C = center;
 		R = radius;
+		OMaterial = material;
+	}
+
+	~Sphere()
+	{
+		delete OMaterial;
 	}
 
 	bool hit(const Ray& ray, float tMin, float tMax, HitRecord& rec) const override
@@ -22,34 +29,40 @@ public:
 		float c = glm::dot(RC, RC) - R*R;
 		float discriminant = b*b - 4 * a*c;
 		float t;
+		bool hitStatus = false;
 
 		if (discriminant >= 0.)
 		{
 			t = (-b - glm::sqrt(discriminant)) / (2.*a);
 			if (t > tMin && t < tMax)
 			{
-				rec.t = t;
-				rec.p = ray.pointAtParameter(t);
-				rec.normal = glm::normalize(rec.p - C);
-				return true;
+				hitStatus = true;
 			}
-		
-			t = (-b + glm::sqrt(discriminant)) / (2.*a);
-			if (t > tMin && t < tMax)
+			else
+			{
+				t = (-b + glm::sqrt(discriminant)) / (2.*a);
+				if (t > tMin && t < tMax)
+				{
+					hitStatus = true;
+				}
+			}
+
+			if(hitStatus)
 			{
 				rec.t = t;
 				rec.p = ray.pointAtParameter(t);
 				rec.normal = glm::normalize(rec.p - C);
-				return true;
+				rec.hMaterial = OMaterial;
 			}
 		}
 
-		return false;
+		return hitStatus;
 	}
 
 private:
 	glm::vec3 C;
 	float R;
+	Material* OMaterial;
 };
 
 #endif

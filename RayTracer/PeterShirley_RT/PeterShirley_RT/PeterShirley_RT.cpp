@@ -5,6 +5,8 @@
 #include "iostream"
 #include "fstream"
 #include "float.h"
+#include <cstdlib>
+#include <vector>
 
 #include "glm.hpp"
 #include "vec3.hpp"
@@ -13,46 +15,30 @@
 #include "hitableList.h"
 #include "sphere.h"
 #include "camera.h"
+#include "utils.h"
+#include "metal.h"
+#include "lamertian.h"
 
 using namespace std;
 #define SAMPLING 100
+#define DEPTHLEVEL 50
 
-/// see : https://stackoverflow.com/questions/14539867/how-to-display-a-progress-indicator-in-pure-c-c-cout-printf
-#define PBSTR "||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"
-#define PBWIDTH 60
-
-void printProgress(double percentage)
-{
-	int val = (int)(percentage * 100);
-	int lpad = (int)(percentage * PBWIDTH);
-	int rpad = PBWIDTH - lpad;
-	printf("\r%3d%% [%.*s%*s]", val, lpad, PBSTR, rpad, "");
-	fflush(stdout);
-}
-
-glm::vec3 getRandomPointInUnitSphere()
-{
-	float dx, dy, dz;
-	glm::vec3 rPoint;
-	do
-	{
-		dx = float(rand()) / float(RAND_MAX);
-		dy = float(rand()) / float(RAND_MAX);
-		dz = float(rand()) / float(RAND_MAX);
-		rPoint = 2.f*glm::vec3(dx, dy, dz);
-
-	} while (glm::length(rPoint) >= 1.);
-
-	return rPoint;
-}
-
-glm::vec3 getColor(const Ray& ray, Hitable* world)
+glm::vec3 getColor(const Ray& ray, Hitable* world, int depth)
 {
 	HitRecord worldHit;
-	if (world->hit(ray, 0.001, FLT_MAX, worldHit))
+	if (world->hit(ray, 0.001, FLT_MAX, worldHit) && depth < DEPTHLEVEL)
 	{
-		Ray scatteredRay(worldHit.p, worldHit.normal + getRandomPointInUnitSphere());
-		return 0.5f * getColor(scatteredRay, world);
+		Ray scatteredRay;
+		glm::vec3 attenuation;
+		if (worldHit.hMaterial->scatter(ray, worldHit, attenuation, scatteredRay))
+		{
+			return (1.0f - attenuation) * getColor(scatteredRay, world, depth+1);
+		}
+		else
+		{
+			cout << "HIT" << endl;
+			return glm::vec3(0., 0., 0.);
+		}
 	}
 
 	glm::vec3 unitRay = glm::normalize(ray.direction());
@@ -62,47 +48,67 @@ glm::vec3 getColor(const Ray& ray, Hitable* world)
 
 int main()
 {
-	int nx = 400;
-	int ny = 200;
-
-	ofstream ofs("test2.ppm", std::ofstream::out);
-
-	ofs << "P3" << endl << nx << " " << ny << endl << 255 << endl;
+	int nx = 200;
+	int ny = 100;
 
 	/// create world
 	Camera worldCamera;
-	Hitable* spheres[2];
-	spheres[0] = new Sphere(glm::vec3(0, 0, -1), 0.5);
-	spheres[1] = new Sphere(glm::vec3(0, -100.5, -1), 100);
-	Hitable* world = new HitableList(spheres, 2);
+	Hitable* spheres[4];
+	spheres[0] = new Sphere(glm::vec3(0, 0, -1), 0.5, new Lambertian(glm::vec3(0.2,0.7,0.7)));
+	spheres[1] = new Sphere(glm::vec3(0, -100.5, -1), 100, new Lambertian(glm::vec3(0.2,0.2,1.0)));
+	spheres[2] = new Sphere(glm::vec3(1, 0, -1), 0.5, new Metal(glm::vec3(0.2, 0.4, 0.8), 0.3));
+	spheres[3] = new Sphere(glm::vec3(-1, 0, -1), 0.5, new Metal(glm::vec3(0.2, 0.2, 0.2), 1.));
+	
+	Hitable* world = new HitableList(spheres, 4);
 
-	/// stub raytracing
-	float progress = 0;
-
+	/// init color values;
+	vector< vector<glm::vec3> > pixels(ny);
 	for (int i = 0; i < ny; i++)
 	{
+		pixels[i].resize(nx);
 		for (int j = 0; j < nx; j++)
 		{
-			glm::vec3 color = glm::vec3(0,0,0);
-			for (int k = 0; k < SAMPLING; k++)
+			pixels[i][j] = glm::vec3(0., 0., 0.);
+		}
+	}
+
+	/// run
+	for (int k = 0; k < SAMPLING; k++)
+	{
+		string fileName = "test_movingAverage";
+		char iter[(sizeof(int) * 8 + 1)];
+		_itoa_s(k, iter, (sizeof(int) * 8 + 1), 10);
+		float alpha = 2.f/(SAMPLING+1);
+
+		ofstream ofs(fileName + iter + ".ppm", std::ofstream::out);
+		ofs << "P3" << endl << nx << " " << ny << endl << 255 << endl;
+
+		/// stub raytracing
+		float progress = 0;
+
+		for (int i = 0; i < ny; i++)
+		{
+			for (int j = 0; j < nx; j++)
 			{
 				float dv = float(rand()) / float(RAND_MAX);
 				float du = float(rand()) / float(RAND_MAX);
 				float v = float(ny - 1 - i + dv) / ny;
 				float u = float(j + du) / nx;
-				
-				Ray sample = worldCamera.getRay(u, v);
-				color = (color*float(k) + getColor(sample, world))/float(k+1); /// running average
-			}
 
-			glm::vec3 RGBColor = float(255.99) * glm::sqrt(color);
-			ofs << int(RGBColor[0]) << " " << int(RGBColor[1]) << " " << int(RGBColor[2]) << endl;
-			progress = (float(i*nx + j) / (nx*ny));
+				Ray sample = worldCamera.getRay(u, v);
+				pixels[i][j] = (pixels[i][j] == glm::vec3(0.,0.,0.)) ?
+					getColor(sample, world, 0) :
+					((1.0f - alpha)*pixels[i][j] + alpha*getColor(sample, world, 0)); /// running average
+
+				glm::vec3 RGBColor = float(255.99) * glm::sqrt(pixels[i][j]);
+				ofs << int(RGBColor[0]) << " " << int(RGBColor[1]) << " " << int(RGBColor[2]) << endl;
+				progress = (float(i*nx + j) / (nx*ny));
+			
+				printProgress(progress);
+			}
 		}
 
-		printProgress(progress);
+		ofs.close();
 	}
-
-	ofs.close();
 }
 
