@@ -37,4 +37,19 @@ glm::vec3 getRandomPointInUnitSphere()
 	return rPoint;
 }
 
+bool refract(glm::vec3 inDirection, glm::vec3 outNormal, glm::vec3& refrectDir, 
+	float n_over_nt)
+{
+	float dt = glm::dot(inDirection, outNormal);
+	float discriminant = 1 - (n_over_nt*n_over_nt)*(1 - dt*dt);
+	if (discriminant > 0)
+	{
+		refrectDir = n_over_nt*(inDirection - dt*outNormal) - outNormal*glm::sqrt(discriminant);
+		return true;
+	}
+	
+	return false;
+}
+
+
 #endif

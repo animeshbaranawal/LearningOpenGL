@@ -18,10 +18,13 @@
 #include "utils.h"
 #include "metal.h"
 #include "lamertian.h"
+#include "dielectric.h"
 
 using namespace std;
-#define SAMPLING 100
+#define SAMPLING 50
 #define DEPTHLEVEL 50
+#define WEIGHTED_AVERAGE 1
+#define ALPHA 2./(SAMPLING+1)
 
 glm::vec3 getColor(const Ray& ray, Hitable* world, int depth)
 {
@@ -36,7 +39,7 @@ glm::vec3 getColor(const Ray& ray, Hitable* world, int depth)
 		}
 		else
 		{
-			cout << "HIT" << endl;
+			/// cout << "HIT" << endl;
 			return glm::vec3(0., 0., 0.);
 		}
 	}
@@ -57,7 +60,7 @@ int main()
 	spheres[0] = new Sphere(glm::vec3(0, 0, -1), 0.5, new Lambertian(glm::vec3(0.2,0.7,0.7)));
 	spheres[1] = new Sphere(glm::vec3(0, -100.5, -1), 100, new Lambertian(glm::vec3(0.2,0.2,1.0)));
 	spheres[2] = new Sphere(glm::vec3(1, 0, -1), 0.5, new Metal(glm::vec3(0.2, 0.4, 0.8), 0.3));
-	spheres[3] = new Sphere(glm::vec3(-1, 0, -1), 0.5, new Metal(glm::vec3(0.2, 0.2, 0.2), 1.));
+	spheres[3] = new Sphere(glm::vec3(-1, 0, -1), 0.5, new Dielectric(1.5));
 	
 	Hitable* world = new HitableList(spheres, 4);
 
@@ -72,16 +75,20 @@ int main()
 		}
 	}
 
+	string fileName = "test5.ppm";
+	ofstream ofs(fileName, std::ofstream::out);
+	ofs << "P3" << endl << nx << " " << ny << endl << 255 << endl;
+
 	/// run
 	for (int k = 0; k < SAMPLING; k++)
 	{
-		string fileName = "test_movingAverage";
+		/*string fileName = "test_movingAverage";
 		char iter[(sizeof(int) * 8 + 1)];
 		_itoa_s(k, iter, (sizeof(int) * 8 + 1), 10);
 		float alpha = 2.f/(SAMPLING+1);
 
 		ofstream ofs(fileName + iter + ".ppm", std::ofstream::out);
-		ofs << "P3" << endl << nx << " " << ny << endl << 255 << endl;
+		ofs << "P3" << endl << nx << " " << ny << endl << 255 << endl;*/
 
 		/// stub raytracing
 		float progress = 0;
@@ -96,19 +103,40 @@ int main()
 				float u = float(j + du) / nx;
 
 				Ray sample = worldCamera.getRay(u, v);
-				pixels[i][j] = (pixels[i][j] == glm::vec3(0.,0.,0.)) ?
-					getColor(sample, world, 0) :
-					((1.0f - alpha)*pixels[i][j] + alpha*getColor(sample, world, 0)); /// running average
 
-				glm::vec3 RGBColor = float(255.99) * glm::sqrt(pixels[i][j]);
-				ofs << int(RGBColor[0]) << " " << int(RGBColor[1]) << " " << int(RGBColor[2]) << endl;
-				progress = (float(i*nx + j) / (nx*ny));
-			
+				if (!WEIGHTED_AVERAGE)
+				{
+					pixels[i][j] = (pixels[i][j] == glm::vec3(0., 0., 0.)) ?
+						getColor(sample, world, 0) :
+						(float(1.0f - ALPHA)*pixels[i][j] + float(ALPHA)*getColor(sample, world, 0)); /// running average
+				}
+				else
+				{
+					pixels[i][j] = pixels[i][j] * (float(k) / float(k + 1)) + getColor(sample, world, 0)*1.f / float(k + 1);
+				}
+					
+
+				/*glm::vec3 RGBColor = float(255.99) * glm::sqrt(pixels[i][j]);
+				ofs << int(RGBColor[0]) << " " << int(RGBColor[1]) << " " << int(RGBColor[2]) << endl;*/
+				
+				progress = (float(k*nx*ny + i*nx + j) / (SAMPLING*nx*ny));
 				printProgress(progress);
 			}
 		}
 
-		ofs.close();
+		/// ofs.close();
 	}
+
+	/// write to file
+	for (int i = 0; i < ny; i++)
+	{
+		for (int j = 0; j < nx; j++)
+		{
+			glm::vec3 RGBColor = float(255.99) * glm::sqrt(pixels[i][j]);
+			ofs << int(RGBColor[0]) << " " << int(RGBColor[1]) << " " << int(RGBColor[2]) << endl;
+		}
+	}
+
+	ofs.close();
 }
 
