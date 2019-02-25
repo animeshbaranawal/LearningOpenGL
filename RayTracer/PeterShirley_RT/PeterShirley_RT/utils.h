@@ -14,11 +14,16 @@ using namespace std;
 
 void printProgress(double percentage)
 {
-	int val = (int)(percentage * 100);
+	float val = float(percentage * 100);
 	int lpad = (int)(percentage * PBWIDTH);
 	int rpad = PBWIDTH - lpad;
-	printf("\r%3d%% [%.*s%*s]", val, lpad, PBSTR, rpad, "");
+	printf("\r%.5f%% [%.*s%*s]", val, lpad, PBSTR, rpad, "");
 	fflush(stdout);
+}
+
+float getRandomNormalPoint()
+{
+	return float(rand()) / float(RAND_MAX);
 }
 
 glm::vec3 getRandomPointInUnitSphere()
@@ -27,11 +32,25 @@ glm::vec3 getRandomPointInUnitSphere()
 	glm::vec3 rPoint;
 	do
 	{
-		dx = float(rand()) / float(RAND_MAX);
-		dy = float(rand()) / float(RAND_MAX);
-		dz = float(rand()) / float(RAND_MAX);
-		rPoint = 2.f*glm::vec3(dx, dy, dz);
+		dx = getRandomNormalPoint();
+		dy = getRandomNormalPoint();
+		dz = getRandomNormalPoint();
+		rPoint = 2.f*glm::vec3(dx, dy, dz) - glm::vec3(1.,1.,1.);
+	} while (glm::length(rPoint) >= 1.);
 
+	return rPoint;
+}
+
+glm::vec3 getRandomPointInUnitDisk()
+{
+	float dx, dy, dz;
+	glm::vec3 rPoint;
+	do
+	{
+		dx = getRandomNormalPoint();
+		dy = getRandomNormalPoint();
+		dz = 0;
+		rPoint = 2.f*glm::vec3(dx, dy, dz) - glm::vec3(1., 1., 0.);
 	} while (glm::length(rPoint) >= 1.);
 
 	return rPoint;
@@ -51,5 +70,11 @@ bool refract(glm::vec3 inDirection, glm::vec3 outNormal, glm::vec3& refrectDir,
 	return false;
 }
 
+float schlick(float cosine, float refIdx)
+{
+	float r0 = (1 - refIdx) / (refIdx + 1);
+	r0 = r0*r0;
+	return r0 + (1 - r0)*std::pow(1 - cosine, 5);
+}
 
 #endif

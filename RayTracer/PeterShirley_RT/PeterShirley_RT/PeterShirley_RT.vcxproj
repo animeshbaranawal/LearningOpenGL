@@ -151,7 +151,7 @@
     <ClInclude Include="dielectric.h" />
     <ClInclude Include="hitable.h" />
     <ClInclude Include="hitableList.h" />
-    <ClInclude Include="lamertian.h" />
+    <ClInclude Include="lambertian.h" />
     <ClInclude Include="material.h" />
     <ClInclude Include="metal.h" />
     <ClInclude Include="ray.h" />

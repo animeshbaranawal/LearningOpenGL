@@ -17,12 +17,12 @@
 #include "camera.h"
 #include "utils.h"
 #include "metal.h"
-#include "lamertian.h"
+#include "lambertian.h"
 #include "dielectric.h"
 
 using namespace std;
-#define SAMPLING 50
-#define DEPTHLEVEL 50
+#define SAMPLING 200
+#define DEPTHLEVEL 100
 #define WEIGHTED_AVERAGE 1
 #define ALPHA 2./(SAMPLING+1)
 
@@ -49,21 +49,68 @@ glm::vec3 getColor(const Ray& ray, Hitable* world, int depth)
 	return (1.f - t)*glm::vec3(1, 1, 1) + t * glm::vec3(0.5, 0.7, 1.0);
 }
 
+Hitable* randomScene()
+{
+	int n = 500;
+	Hitable **list = new Hitable*[n + 1];
+	list[0] = new Sphere(glm::vec3(0, -1000, 0), 1000, new Lambertian(glm::vec3(0.5, 0.5, 0.5)));
+	int i = 1;
+	for (int a = -11; a < 11; a++)
+	{
+		for (int b = -11; b < 11; b++)
+		{
+			float chooseMat = getRandomNormalPoint();
+			glm::vec3 center(a + 0.9*getRandomNormalPoint(), 0.2, b + 0.9*getRandomNormalPoint());
+			if (glm::length(center - glm::vec3(4, 0.2, 0)) > 0.9)
+			{
+				if (chooseMat < 0.8)
+				{
+					list[i++] = new Sphere(center, 0.2, new Lambertian(glm::vec3(getRandomNormalPoint()*getRandomNormalPoint(),
+						getRandomNormalPoint()*getRandomNormalPoint(),
+						getRandomNormalPoint()*getRandomNormalPoint())));
+				}
+				else if (chooseMat < 0.95)
+				{
+					list[i++] = new Sphere(center, 0.2, new Metal(glm::vec3(0.5*(1 - getRandomNormalPoint()),
+						0.5*(1 - getRandomNormalPoint()), 0.5*(1 - getRandomNormalPoint())), 
+						0.5*getRandomNormalPoint()));
+				}
+				else
+				{
+					list[i++] = new Sphere(center, 0.2, new Dielectric(1.5));
+				}
+			}
+		}
+	}
+
+	list[i++] = new Sphere(glm::vec3(0, 1, 0), 1., new Dielectric(1.5));
+	list[i++] = new Sphere(glm::vec3(-4, 1, 0), 1., new Lambertian(glm::vec3(0.6, 0.8, 0.9)));
+	list[i++] = new Sphere(glm::vec3(4, 1, 0), 1., new Metal(glm::vec3(0.3, 0.4, 0.5), 0.));
+	return new HitableList(list, i);
+}
+
 int main()
 {
-	int nx = 200;
-	int ny = 100;
+	int nx = 1366;
+	int ny = 768;
 
 	/// create world
-	Camera worldCamera;
-	Hitable* spheres[4];
+	glm::vec3 lFrom(0, 0, 0);
+	glm::vec3 lAt(0, 0, -1);
+	float fD = glm::length(lFrom - lAt);
+	float ap = 0.5;
+
+	Camera worldCamera(lFrom, lAt, glm::vec3(0,1,0), 90, float(nx)/float(ny), ap, fD);
+	/*Hitable* spheres[5];
 	spheres[0] = new Sphere(glm::vec3(0, 0, -1), 0.5, new Lambertian(glm::vec3(0.2,0.7,0.7)));
 	spheres[1] = new Sphere(glm::vec3(0, -100.5, -1), 100, new Lambertian(glm::vec3(0.2,0.2,1.0)));
 	spheres[2] = new Sphere(glm::vec3(1, 0, -1), 0.5, new Metal(glm::vec3(0.2, 0.4, 0.8), 0.3));
 	spheres[3] = new Sphere(glm::vec3(-1, 0, -1), 0.5, new Dielectric(1.5));
-	
-	Hitable* world = new HitableList(spheres, 4);
+	spheres[4] = new Sphere(glm::vec3(-1, 0, -1), -0.45, new Dielectric(1.5));
 
+	Hitable* world = new HitableList(spheres, 5);*/
+
+	Hitable* world = randomScene();
 	/// init color values;
 	vector< vector<glm::vec3> > pixels(ny);
 	for (int i = 0; i < ny; i++)
@@ -75,7 +122,7 @@ int main()
 		}
 	}
 
-	string fileName = "test5.ppm";
+	string fileName = "world.ppm";
 	ofstream ofs(fileName, std::ofstream::out);
 	ofs << "P3" << endl << nx << " " << ny << endl << 255 << endl;
 

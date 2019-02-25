@@ -42,9 +42,6 @@
     <ClInclude Include="material.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="lamertian.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -52,6 +49,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="dielectric.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lambertian.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

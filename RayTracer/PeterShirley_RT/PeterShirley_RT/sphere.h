@@ -51,7 +51,7 @@ public:
 			{
 				rec.t = t;
 				rec.p = ray.pointAtParameter(t);
-				rec.normal = glm::normalize(rec.p - C);
+				rec.normal = (rec.p - C) / R;
 				rec.hMaterial = OMaterial;
 			}
 		}
